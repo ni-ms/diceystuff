@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dice Game</title>
+</head>
+<body>
+<form id="diceForm">
+    <label for="number">Number:</label><br>
+    <input type="number" id="number" name="number"><br>
+    <label for="amount">Amount:</label><br>
+    <input type="number" id="amount" name="amount" step="0.01"><br>
+    <label for="multiplier">Multiplier:</label><br>
+    <input type="number" id="multiplier" name="multiplier" step="0.01"><br>
+    <input type="submit" value="Submit">
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('diceForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var number = document.getElementById('number').value;
+        var amount = document.getElementById('amount').value;
+        var multiplier = document.getElementById('multiplier').value;
+
+        fetch('http://localhost:8000/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "number": number.toString(), "amount": amount.toString(), "multiplier": multiplier.toString() })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = "Payout: " + data.payout + ", Hash: " + data.hash;
+            });
+    });
+</script>
+</body>
+</html>
